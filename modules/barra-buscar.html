@@ -1,0 +1,47 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<dom-module id="barra-buscar"> 
+	<template>
+		<style>
+			.input-style{
+				--primary-text-color:yellow;
+				--secondary-text-color: orange;
+			}
+		</style>
+
+
+		<paper-input class="input-style" on-tap="_filtrar" id="filter" label="introducir el nombre un contacto" value="[[filter]]"></paper-input>
+		<paper-button on-click="_filtrar">Buscar</paper-button>
+	</template>
+	<script>
+		(function (){
+			'use strict';
+
+			class BarraBuscar extends  Polymer.GestureEventListeners(Polymer.Element){
+				static get is(){return `barra-buscar`;}
+
+				static get properties(){
+
+					return	{
+						filter:{
+							type:String,
+							value:``
+						}
+					}
+				}
+
+				_filtrar(e){
+					//if(this.$.filter.value !== ``)
+					{
+						this.dispatchEvent(new CustomEvent(`filter-user`,{bubbles:true, composed:true, detail:{filter:this.$.filter.value}}));
+						this.$.filter.value = ``;
+					}		
+				}
+
+			}
+			customElements.define(BarraBuscar.is, BarraBuscar);
+		})()
+	</script>
+</dom-module>

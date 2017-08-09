@@ -1,0 +1,59 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="contact-list">
+  <template>
+      <style>
+        .item{
+          display: block;
+        }
+      </style>
+      <h2>Contactos</h2>
+      <div id="contactListDiv">
+      <template is="dom-repeat" items="[[contacts]]" filter="_contactsFilter" observer="type name" as="contact">
+        <paper-item class="item" index="[[contact.index]]" on-tap="_indexChanged">[[contact.name]]</paper-item>
+      </template>
+      </div>
+  </template>
+  <script>
+  (function contactlist() {
+
+    class ContactList extends Polymer.GestureEventListeners(Polymer.Element){
+
+      static get is (){return "contact-list"}
+
+      static get properties(){
+        return{
+          contacts:{
+            type:Array,
+            value:[]
+          },
+          filter:{
+            type:String,
+            value:``
+          }
+        }
+      }
+
+      _contactsFilter(contact){
+        if (this.filter !== ``){
+            return contact.name === this.filter;
+        }
+        return true;
+      }
+
+      _indexChanged(e){
+        console.log(e.currentTarget.index)
+        this.dispatchEvent(new CustomEvent('index-changed', {bubbles:true, composed:true, detail:{index:e.currentTarget.index}}));
+      }
+
+    }
+
+    customElements.define(ContactList.is,ContactList);
+
+  })();
+
+
+    </script>
+</dom-module>

@@ -1,0 +1,90 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+
+<dom-module id="add-contact">
+  <template>
+    <style>
+      paper-fab{
+        position: relative;
+        left: 973px;
+        top: 513px;
+        z-index: 0;
+      }
+      .control{
+        height: 50px;
+      }
+    </style>
+
+    <paper-fab icon="add"  raised on-click="_openDialog"></paper-fab>
+        <paper-dialog id="dialog" modal>
+      <h2>Agregar contacto</h2>
+      <paper-input class="control" id="name"  label="Nombre" pattern="^[A-Za-z ]+$" required auto-validate error-message="Nombre(s) necesario!"></paper-input>
+      <paper-input class="control" id="lastname" label="Apellidos" required auto-validate error-message="Apellido necesario!"></paper-input>
+      <paper-input class="control" id="email" label="Correo" required auto-validate error-message="Correo necesario!">
+        <div slot="suffix">@email.com</div>
+      </paper-input>
+      <paper-input class="control" id="phone" label="Telefono" type="text" required auto-validate error-message="Telefono necesario!"></paper-input>
+      <paper-input class="control" id="address" label="Direccion" type="text" required auto-validate error-message="Direccion necesaio!"></paper-input>
+      <paper-textarea id="aboutme" label="Aceca de mi" required auto-validate error-message="Acerca de mi necesario!"></paper-textarea>
+      <div class="buttons">
+        <paper-button dialog-dismiss on-tap="_cleanInput">Cancelar</paper-button>
+        <paper-button dialog-confirm autofocus on-tap="_saveUser">Guardar</paper-button>
+      </div>
+    </paper-dialog>
+
+
+  </template>
+  <script>
+  (function addcontact() {
+    'use strict';
+
+    class AddContact extends Polymer.Element{
+
+      static get is (){return "add-contact"}
+
+      _openDialog(event){
+        this.$.dialog.open();
+      }
+
+      _cleanInput(){
+        this.$.name.value ="";
+        this.$.lastname.value ="";
+        this.$.email.value ="";
+        this.$.phone.value ="";
+        this.$.aboutme.value ="";
+        this.$.address = "";
+      }
+
+      _saveUser(){
+        let objectUser = {};
+
+        objectUser.name = this.$.name.value;
+        objectUser.lastName  = this.$.lastname.value;
+        objectUser.email = this.$.email.value;
+        objectUser.telephone = this.$.phone.value;
+        objectUser.address = this.$.address.value;
+        objectUser.bio = this.$.aboutme.value;
+
+         this.dispatchEvent(new
+           CustomEvent(`contact-changed`,{
+             bubbles: true, composed: true,
+             detail:objectUser
+
+          }));
+      }
+
+    }
+
+    customElements.define(AddContact.is,AddContact);
+
+  })();
+
+
+    </script>
+</dom-module>

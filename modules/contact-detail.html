@@ -1,0 +1,194 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+
+<dom-module id="contact-detail">
+  <template>
+
+
+      <!-- Styles goes here -->
+      <style>
+        .contact-container {
+          width: 100%;
+          height: 90%;
+          border: 1px solid black;
+          background-color: var(--contact-background-component,#FFFFFF);
+          color:var(--contact-component-font-color,#616161);
+          font-family: sans-serif;
+
+        }
+        .img-container {
+          width:170px;
+          height: 170px;
+          margin: 10px auto;
+          border-radius: 50%;
+          border:8px solid var(--border-image-color,#B0BEC5);
+        }  
+        .contact-name {
+          text-align: center;
+          display: block;
+          font-size: 1.65rem;
+        }
+
+        .image {
+          width: 170px;
+          height: 170px;
+          border-radius: 50%;
+        }
+
+        .shadybar {
+          background-color: var(--shady-bar-background,#3F51B5);
+          height: 40px;
+          box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+          box-sizing: border-box;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          font-size: 1.2rem;
+
+        }
+
+        .header-icon {
+          color:var(--header-color-icon,#FFFFFF);
+          margin-left: 10px;
+          align-self: center;
+        }
+
+        .header-title {
+          color:var(--header-color-title,#FFFFFF);
+          font-weight: bold;
+          font-size: 1rem;
+          display: inline-flex;
+          text-transform: uppercase;
+          align-self: center;
+          margin-left: 10px;
+
+        }
+
+        .contact-info {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          margin-top: 10px;
+          /*align-items: center;*/
+        }
+
+        .icon-container {
+          flex: 0 0 35%;
+          text-align: center;
+          align-self: center;
+          margin:0;
+          font-size: 1.07rem;
+          box-sizing: border-box;
+
+        }
+
+        .icon-container i {
+          font-weight: bold;
+          vertical-align: bottom;
+        }
+
+        .icon-container span {
+          display: inline-flex;
+          align-self: center;
+        }
+
+        .bio-container,.bio-title {
+          width: 85%;
+          margin:10px auto;
+          font-style: italic;
+          font-size: 1.05rem;
+          line-height: 30px;
+          display: block;
+        }
+
+      </style>
+
+      <div class="contact-container">
+
+          <div class="shadybar">
+            <iron-icon class="header-icon" icon="communication:contacts"></iron-icon>
+            <span class="header-title">Información de contacto</span>
+          </div>
+
+          <div class="img-container">
+              <img class="image" src$="[[contact.image]]" alt="image profile">
+          </div>
+
+            <strong class="contact-name">
+              {{fullName}}
+            </strong>
+
+          <div class="contact-info">
+
+          
+            <div class="icon-container">
+              <iron-icon icon="communication:email"></iron-icon>
+              <span>[[contact.email]]</span>
+            </div>
+
+            <div class="icon-container">
+              <iron-icon icon="communication:call"></iron-icon>
+              <span>
+                [[contact.telephone]]
+              </span>
+            </div>
+          </div>
+
+
+          <strong class="bio-title">
+            Acerca de mi:
+          </strong>
+          <p class="bio-container">
+            [[contact.bio]]
+          </p>
+      </div>
+  </template>
+  
+
+  <script>
+  (function contactdetails(customElements) {
+
+    class ContactDetail extends Polymer.Element{
+
+      static get is() {return "contact-detail";}
+
+      static get properties() {
+        return {
+          contact:{
+            type:Object,
+            value:{},
+            notify:true,
+            reflectToAttribute:true
+            ,observer:'_contactChanged'
+          },
+
+          fullName:{
+            type:String,
+            computed:'computeFullName(contact.name,contact.lastName)'
+          }
+        }
+      }
+
+
+      computeFullName(name,lastName) {
+        return `${name} ${lastName}` 
+      }
+
+      _contactChanged(){
+        if(!this.contact.hasOwnProperty('image')){
+          this.set('contact.image','assets/img/bg.png');
+        }
+        console.log('ContactContainer - Contact object has changed');
+      }
+
+
+    }
+
+    customElements.define(ContactDetail.is,ContactDetail);
+
+  })(window.customElements);
+
+
+    </script>
+</dom-module>
